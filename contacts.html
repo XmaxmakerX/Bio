@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Контакты</title>
 
-    <!-- Анти-вспышка темы (см. комментарий в index.html) -->
+    <!-- Анти-вспышка темы -->
     <script>
         (function () {
             var saved = localStorage.getItem('theme');
@@ -15,48 +15,70 @@
         })();
     </script>
 
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-    <!-- ============================================================
-         ШАПКА С НАВИГАЦИЕЙ
-         ============================================================ -->
     <header>
         <nav>
-            <ul class="nav-links">
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="#">Проекты</a></li>
-                <!-- Активный пункт: без href — некликабельный -->
-                <li><a class="active" aria-current="page">Контакты</a></li>
-            </ul>
+            <div id="nav-panel" class="nav-panel">
+                <ul class="nav-links">
+                    <li>
+                        <a href="index.html">
+                            <span class="nav-icon icon-home"></span>Главная
+                        </a>
+                    </li>
+                    <li>
+                        <a href="projects.html">
+                            <span class="nav-icon icon-folder"></span>Проекты
+                        </a>
+                    </li>
+                    <li>
+                        <a class="active" aria-current="page">
+                            <span class="nav-icon icon-mail"></span>Контакты
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-            <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему">
-                <span class="icon icon-sun"></span>
-                <span class="icon icon-moon"></span>
-            </button>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему">
+                    <span class="icon icon-sun"></span>
+                    <span class="icon icon-moon"></span>
+                </button>
+
+                <button id="menu-toggle" class="menu-toggle" aria-label="Открыть меню">
+                    <span class="burger-line"></span>
+                    <span class="burger-line"></span>
+                </button>
+            </div>
         </nav>
+
+        <div id="overlay" class="overlay"></div>
     </header>
 
-    <!-- ============================================================
-         ОСНОВНОЙ КОНТЕНТ
-         ============================================================ -->
     <main>
         <div class="grid">
             <section class="card full-width">
-                <h2>Контакты</h2>
-                <p class="wip">WIP</p>
+                <h2>Ссылки</h2>
+                <div class="links">
+                    <a href="#">WIP</a>
+                    <a href="#">WIP</a>
+                    <a href="#">WIP</a>
+                    <a href="#">WIP</a>
+                </div>
             </section>
         </div>
     </main>
 
-    <!-- ============================================================
-         ПОДВАЛ
-         ============================================================ -->
     <footer>
         <p>&copy; <span id="year"></span> Все права защищены</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
