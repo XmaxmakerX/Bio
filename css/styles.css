@@ -1,0 +1,467 @@
+/* ============================================================
+   1. ПЕРЕМЕННЫЕ ТЕМ
+   ============================================================ */
+
+:root {
+    --accent: #d8dde4;
+    --accent-hover: #c8ced7;
+    --accent-text: #000000;
+
+    --text: #000000;
+    --heading: #000000;
+    --text-muted: #333333;
+
+    --bg: #e6eff4;
+    --card-bg: #ffffff;
+    --shadow: 0 1px 3px rgba(80, 90, 110, 0.10);
+    --border: #cfdde8;
+}
+
+[data-theme="dark"] {
+    --accent: #4a505c;
+    --accent-hover: #575e6c;
+    --accent-text: #ffffff;
+
+    --text: #ffffff;
+    --heading: #ffffff;
+    --text-muted: #d0d0d0;
+
+    --bg: #2b2f3a;
+    --card-bg: #353a48;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --border: #3f4553;
+}
+
+
+/* ============================================================
+   2. БАЗОВЫЕ СБРОСЫ
+   ============================================================ */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Inter",
+                 -apple-system, BlinkMacSystemFont,
+                 "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial,
+                 sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background 0.25s ease, color 0.25s ease;
+}
+
+
+/* ============================================================
+   3. ШАПКА
+   Тонкая полоса сверху, внутри — только кнопки управления
+   (тема + бургер) в правом углу. Ссылки уехали в панель.
+   ============================================================ */
+header {
+    background: var(--accent);
+    padding: 0 20px;
+    position: relative;
+    transition: background 0.25s ease;
+}
+
+nav {
+    max-width: 960px;
+    margin: 0 auto;
+    height: 60px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+}
+
+
+/* ============================================================
+   4. БЛОК КНОПОК (тема + бургер) — всегда справа
+   ============================================================ */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    z-index: 300;
+}
+
+
+/* ============================================================
+   5. КНОПКА ТЕМЫ + АНИМАЦИЯ СОЛНЦЕ ↔ ЛУНА
+   ============================================================ */
+.theme-toggle {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.theme-toggle:hover {
+    opacity: 0.7;
+}
+
+.theme-toggle .icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 22px;
+    height: 22px;
+    margin: -11px 0 0 -11px;
+
+    background-color: var(--accent-text);
+    -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+            mask-position: center;
+    -webkit-mask-size: contain;
+            mask-size: contain;
+
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    will-change: opacity, transform;
+}
+
+.icon-sun {
+    -webkit-mask-image: url("../icons/sun.svg");
+            mask-image: url("../icons/sun.svg");
+}
+.icon-moon {
+    -webkit-mask-image: url("../icons/moon.svg");
+            mask-image: url("../icons/moon.svg");
+}
+
+[data-theme="light"] .icon-sun {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+[data-theme="light"] .icon-moon {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.4);
+}
+
+[data-theme="dark"] .icon-sun {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.4);
+}
+[data-theme="dark"] .icon-moon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+
+/* ============================================================
+   6. БУРГЕР — две полоски, видим ВСЕГДА (десктоп и мобилка)
+   ============================================================ */
+.menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 22px;
+    height: 14px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.burger-line {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--accent-text);
+    border-radius: 2px;
+    transition: transform 0.25s ease;
+}
+
+.menu-toggle.open .burger-line:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+}
+.menu-toggle.open .burger-line:nth-child(2) {
+    transform: translateY(-6px) rotate(-45deg);
+}
+
+
+/* ============================================================
+   7. ВЫЕЗЖАЮЩАЯ ПАНЕЛЬ
+   По умолчанию за правым краем экрана. По клику на бургер
+   выезжает внутрь. Одинаково работает на всех размерах.
+   Ширина: 320px на десктопе, 280px на мобильных (см. ниже).
+   ============================================================ */
+.nav-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    max-width: 85vw;
+    height: 100vh;
+    background: var(--accent);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 80px 20px 20px;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+    z-index: 200;
+    overflow-y: auto;
+}
+
+.nav-panel.open {
+    transform: translateX(0);
+}
+
+
+/* ---------- Ссылки в панели (вертикально) ---------- */
+.nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.nav-links a {
+    display: flex;
+    align-items: center;
+    color: var(--accent-text);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 12px 16px;
+    border-radius: 6px;
+    opacity: 0.85;
+    cursor: pointer;
+    transition: background 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-links a:hover {
+    opacity: 1;
+    background: rgba(128, 128, 128, 0.22);
+}
+
+.nav-links a.active {
+    opacity: 1;
+    font-weight: 600;
+    background: rgba(128, 128, 128, 0.30);
+    pointer-events: none;
+    cursor: default;
+    outline: none;
+}
+
+
+/* ---------- Иконки пунктов меню ----------
+   SVG работает как маска, цвет берётся из background-color.
+   Размер 20×20 — чуть больше текста (~16px). */
+.nav-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    flex-shrink: 0;
+    background-color: var(--accent-text);
+
+    -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+            mask-position: center;
+    -webkit-mask-size: contain;
+            mask-size: contain;
+}
+
+.icon-home {
+    -webkit-mask-image: url("../icons/home.svg");
+            mask-image: url("../icons/home.svg");
+}
+.icon-folder {
+    -webkit-mask-image: url("../icons/folder.svg");
+            mask-image: url("../icons/folder.svg");
+}
+.icon-mail {
+    -webkit-mask-image: url("../icons/mail.svg");
+            mask-image: url("../icons/mail.svg");
+}
+
+
+/* ============================================================
+   8. ОСНОВНОЙ КОНТЕНТ
+   ============================================================ */
+main {
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 20px 24px;
+    box-shadow: var(--shadow);
+    transition: background 0.25s ease;
+}
+
+.card h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--heading);
+    transition: color 0.25s ease;
+}
+
+.wip {
+    color: var(--text-muted);
+    font-style: italic;
+    letter-spacing: 0.05em;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+    min-height: 120px;
+}
+
+
+/* ============================================================
+   9. ССЫЛКИ-КНОПКИ
+   ============================================================ */
+.links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.links a {
+    display: inline-block;
+    padding: 8px 16px;
+    background: var(--accent);
+    color: var(--accent-text);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.links a:hover {
+    background: var(--accent-hover);
+}
+
+
+/* ============================================================
+   10. ПОДВАЛ
+   ============================================================ */
+footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+
+/* ============================================================
+   11. ОВЕРЛЕЙ (затемнение под панелью)
+   ============================================================ */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 150;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s;
+}
+.overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* ============================================================
+   12. МОБИЛЬНЫЕ (<= 640px)
+   Единственное отличие: панель чуть уже и сетка в одну колонку.
+   ============================================================ */
+@media (max-width: 640px) {
+
+    .nav-panel {
+        width: 280px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ============================================================
+   13. СТРАНИЦА 404
+   ============================================================ */
+.error-card {
+    text-align: center;
+    padding: 60px 24px;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-code {
+    font-size: 6rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 24px;
+    color: var(--heading);
+    letter-spacing: -0.02em;
+}
+
+.error-text {
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 20px;
+}
+
+.error-link a {
+    display: inline-block;
+    padding: 10px 20px;
+    background: var(--accent);
+    color: var(--accent-text);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.error-link a:hover {
+    background: var(--accent-hover);
+}
+
+@media (max-width: 640px) {
+    .error-card {
+        padding: 40px 20px;
+        min-height: 260px;
+    }
+    .error-code {
+        font-size: 4.5rem;
+        margin-bottom: 18px;
+    }
+    .error-text {
+        font-size: 1rem;
+    }
+}
