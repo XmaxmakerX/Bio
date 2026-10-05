@@ -5,12 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Главная</title>
 
-    <!-- ============================================================
-         АНТИ-ВСПЫШКА ТЕМЫ
-         Этот скрипт выполняется ДО загрузки CSS и сразу ставит
-         атрибут data-theme на <html>. Так пользователь не увидит
-         мигание светлой темы при переходе между страницами.
-         ============================================================ -->
+    <!-- Анти-вспышка темы -->
     <script>
         (function () {
             var saved = localStorage.getItem('theme');
@@ -20,68 +15,69 @@
         })();
     </script>
 
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-    <!-- ============================================================
-         ШАПКА С НАВИГАЦИЕЙ
-         ============================================================ -->
     <header>
         <nav>
-            <ul class="nav-links">
-                <!-- Активный пункт: без href — некликабельный -->
-                <li><a class="active" aria-current="page">Главная</a></li>
-                <li><a href="#">Проекты</a></li>
-                <li><a href="contacts.html">Контакты</a></li>
-            </ul>
+            <div id="nav-panel" class="nav-panel">
+                <ul class="nav-links">
+                    <li>
+                        <a class="active" aria-current="page">
+                            <span class="nav-icon icon-home"></span>Главная
+                        </a>
+                    </li>
+                    <li>
+                        <a href="projects.html">
+                            <span class="nav-icon icon-folder"></span>Проекты
+                        </a>
+                    </li>
+                    <li>
+                        <a href="contacts.html">
+                            <span class="nav-icon icon-mail"></span>Контакты
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-            <!-- Кнопка переключения темы: два SVG-иконки, показываем нужную -->
-            <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему">
-                <span class="icon icon-sun"></span>
-                <span class="icon icon-moon"></span>
-            </button>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему">
+                    <span class="icon icon-sun"></span>
+                    <span class="icon icon-moon"></span>
+                </button>
+
+                <button id="menu-toggle" class="menu-toggle" aria-label="Открыть меню">
+                    <span class="burger-line"></span>
+                    <span class="burger-line"></span>
+                </button>
+            </div>
         </nav>
+
+        <div id="overlay" class="overlay"></div>
     </header>
 
-    <!-- ============================================================
-         ОСНОВНОЙ КОНТЕНТ
-         ============================================================ -->
     <main>
         <div class="grid">
-
-            <!-- Карточка 1: Обо мне -->
-            <section class="card">
+            <section class="card full-width">
                 <h2>Обо мне</h2>
                 <p class="wip">WIP</p>
             </section>
 
-            <!-- Карточка 2: Ссылки -->
-            <section class="card">
-                <h2>Ссылки</h2>
-                <div class="links">
-                    <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
-                    <a href="https://t.me/" target="_blank" rel="noopener">Telegram</a>
-                    <a href="https://vk.com/" target="_blank" rel="noopener">VK</a>
-                    <a href="mailto:example@mail.com">Email</a>
-                </div>
-            </section>
-
-            <!-- Карточка 3: пустой контейнер на всю ширину с WIP -->
             <section class="card full-width">
                 <p class="wip">WIP</p>
             </section>
-
         </div>
     </main>
 
-    <!-- ============================================================
-         ПОДВАЛ
-         ============================================================ -->
     <footer>
         <p>&copy; <span id="year"></span> Все права защищены</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
