@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты</title>
+
+    <!-- Анти-вспышка темы (см. комментарий в index.html) -->
+    <script>
+        (function () {
+            var saved = localStorage.getItem('theme');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var theme = saved || (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- ============================================================
+         ШАПКА С НАВИГАЦИЕЙ
+         ============================================================ -->
+    <header>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="#">Проекты</a></li>
+                <!-- Активный пункт: без href — некликабельный -->
+                <li><a class="active" aria-current="page">Контакты</a></li>
+            </ul>
+
+            <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему">
+                <span class="icon icon-sun"></span>
+                <span class="icon icon-moon"></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- ============================================================
+         ОСНОВНОЙ КОНТЕНТ
+         ============================================================ -->
+    <main>
+        <div class="grid">
+            <section class="card full-width">
+                <h2>Контакты</h2>
+                <p class="wip">WIP</p>
+            </section>
+        </div>
+    </main>
+
+    <!-- ============================================================
+         ПОДВАЛ
+         ============================================================ -->
+    <footer>
+        <p>&copy; <span id="year"></span> Все права защищены</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

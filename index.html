@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная</title>
+
+    <!-- ============================================================
+         АНТИ-ВСПЫШКА ТЕМЫ
+         Этот скрипт выполняется ДО загрузки CSS и сразу ставит
+         атрибут data-theme на <html>. Так пользователь не увидит
+         мигание светлой темы при переходе между страницами.
+         ============================================================ -->
+    <script>
+        (function () {
+            var saved = localStorage.getItem('theme');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var theme = saved || (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- ============================================================
+         ШАПКА С НАВИГАЦИЕЙ
+         ============================================================ -->
+    <header>
+        <nav>
+            <ul class="nav-links">
+                <!-- Активный пункт: без href — некликабельный -->
+                <li><a class="active" aria-current="page">Главная</a></li>
+                <li><a href="#">Проекты</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+            </ul>
+
+            <!-- Кнопка переключения темы: два SVG-иконки, показываем нужную -->
+            <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему">
+                <span class="icon icon-sun"></span>
+                <span class="icon icon-moon"></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- ============================================================
+         ОСНОВНОЙ КОНТЕНТ
+         ============================================================ -->
+    <main>
+        <div class="grid">
+
+            <!-- Карточка 1: Обо мне -->
+            <section class="card">
+                <h2>Обо мне</h2>
+                <p class="wip">WIP</p>
+            </section>
+
+            <!-- Карточка 2: Ссылки -->
+            <section class="card">
+                <h2>Ссылки</h2>
+                <div class="links">
+                    <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://t.me/" target="_blank" rel="noopener">Telegram</a>
+                    <a href="https://vk.com/" target="_blank" rel="noopener">VK</a>
+                    <a href="mailto:example@mail.com">Email</a>
+                </div>
+            </section>
+
+            <!-- Карточка 3: пустой контейнер на всю ширину с WIP -->
+            <section class="card full-width">
+                <p class="wip">WIP</p>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- ============================================================
+         ПОДВАЛ
+         ============================================================ -->
+    <footer>
+        <p>&copy; <span id="year"></span> Все права защищены</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
