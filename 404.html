@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru"
+      data-title-ru="404 — Страница не найдена"
+      data-title-en="404 — Page not found">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,31 +21,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/styles.css">
+
+    <script src="js/header.js"></script>
+    <script src="js/footer.js"></script>
 </head>
 <body>
 
-    <header>
-        <nav>
-            <div class="nav-actions nav-actions-solo">
-                <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему">
-                    <span class="icon icon-sun"></span>
-                    <span class="icon icon-moon"></span>
-                </button>
-            </div>
-        </nav>
-    </header>
+    <site-header simple></site-header>
 
     <main>
         <section class="card full-width error-card">
             <h2 class="error-code">404</h2>
-            <p class="error-text">Такой страницы нет.</p>
-            <p class="error-link"><a href="index.html">Вернуться на главную</a></p>
+            <p class="error-text"
+               data-ru="Такой страницы нет."
+               data-en="This page does not exist.">Такой страницы нет.</p>
+            <p class="error-link">
+                <a href="index.html"
+                   data-ru="Вернуться на главную"
+                   data-en="Back to home">Вернуться на главную</a>
+            </p>
         </section>
     </main>
 
-    <footer>
-        <p>&copy; <span id="year"></span> Все права защищены</p>
-    </footer>
+    <site-footer></site-footer>
 
     <script src="js/script.js"></script>
 </body>
