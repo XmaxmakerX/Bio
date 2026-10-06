@@ -15,6 +15,12 @@
     --card-bg: #ffffff;
     --shadow: 0 1px 3px rgba(80, 90, 110, 0.10);
     --border: #cfdde8;
+
+    --grid-line: rgba(0, 0, 0, 0.05);
+
+    /* Полупрозрачный фон для плашки бейджей */
+    --badges-bg:     rgba(80, 90, 110, 0.14);
+    --badges-border: rgba(80, 90, 110, 0.22);
 }
 
 [data-theme="dark"] {
@@ -30,6 +36,36 @@
     --card-bg: #353a48;
     --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
     --border: #3f4553;
+
+    --grid-line: rgba(255, 255, 255, 0.045);
+
+    --badges-bg:     rgba(255, 255, 255, 0.10);
+    --badges-border: rgba(255, 255, 255, 0.16);
+}
+
+
+/* ============================================================
+   1.5. АНИМИРОВАННЫЙ ФОН — ДИАГОНАЛЬНАЯ СЕТКА
+   ============================================================ */
+body::before {
+    content: '';
+    position: fixed;
+    inset: -50%;
+    z-index: -1;
+    pointer-events: none;
+
+    background-image:
+        linear-gradient(to right,  var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 56px 56px;
+
+    transform: rotate(-15deg);
+    animation: gridMove 28s linear infinite;
+}
+
+@keyframes gridMove {
+    from { background-position: 0 0; }
+    to   { background-position: 56px 56px; }
 }
 
 
@@ -40,6 +76,15 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+site-header,
+site-footer {
+    display: block;
+}
+
+html {
+    height: 100%;
 }
 
 body {
@@ -53,46 +98,55 @@ body {
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
     transition: background 0.25s ease, color 0.25s ease;
 }
 
 
 /* ============================================================
    3. ШАПКА
-   Тонкая полоса сверху, внутри — только кнопки управления
-   (тема + бургер) в правом углу. Ссылки уехали в панель.
    ============================================================ */
 header {
     background: var(--accent);
-    padding: 0 20px;
+    padding: 0;
     position: relative;
     transition: background 0.25s ease;
+    z-index: 100;
 }
 
 nav {
-    max-width: 960px;
-    margin: 0 auto;
+    max-width: none;
+    margin: 0;
     height: 60px;
     display: flex;
-    justify-content: flex-end;
     align-items: center;
+    justify-content: space-between;
     position: relative;
+    padding: 0 20px;
 }
 
 
 /* ============================================================
-   4. БЛОК КНОПОК (тема + бургер) — всегда справа
+   4. БЛОК КНОПОК (тема + язык + бургер)
+   position: relative + z-index, чтобы кнопки были выше панели
+   и клики по ним не перехватывались.
    ============================================================ */
 .nav-actions {
     display: flex;
     align-items: center;
     gap: 14px;
+
+    position: relative;
     z-index: 300;
 }
 
 
 /* ============================================================
-   5. КНОПКА ТЕМЫ + АНИМАЦИЯ СОЛНЦЕ ↔ ЛУНА
+   5. ИКОНКА ТЕМЫ + АНИМАЦИЯ СОЛНЦЕ ↔ ЛУНА
    ============================================================ */
 .theme-toggle {
     position: relative;
@@ -102,7 +156,9 @@ nav {
     background: transparent;
     padding: 0;
     cursor: pointer;
-    transition: opacity 0.2s ease;
+
+    color: var(--accent-text);
+    transition: opacity 0.2s ease, color 0.25s ease;
 }
 
 .theme-toggle:hover {
@@ -111,33 +167,46 @@ nav {
 
 .theme-toggle .icon {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 0;
+    left: 0;
     width: 22px;
     height: 22px;
-    margin: -11px 0 0 -11px;
-
-    background-color: var(--accent-text);
-    -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-            mask-position: center;
-    -webkit-mask-size: contain;
-            mask-size: contain;
+    display: block;
 
     transition: opacity 0.4s ease, transform 0.4s ease;
     will-change: opacity, transform;
 }
 
-.icon-sun {
-    -webkit-mask-image: url("../icons/sun.svg");
-            mask-image: url("../icons/sun.svg");
-}
-.icon-moon {
-    -webkit-mask-image: url("../icons/moon.svg");
-            mask-image: url("../icons/moon.svg");
+.theme-toggle .icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
+/* Медленное вращение солнца */
+[data-theme="light"] .icon-sun svg {
+    animation: sunRotate 20s linear infinite;
+    transform-origin: 12px 12px;
+}
+
+@keyframes sunRotate {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* Медленное покачивание луны */
+[data-theme="dark"] .icon-moon svg {
+    animation: moonSway 4s ease-in-out infinite;
+    transform-origin: 12px 12px;
+}
+
+@keyframes moonSway {
+    0%   { transform: rotate(-8deg); }
+    50%  { transform: rotate(8deg);  }
+    100% { transform: rotate(-8deg); }
+}
+
+/* Показ / скрытие иконок по теме */
 [data-theme="light"] .icon-sun {
     opacity: 1;
     transform: rotate(0deg) scale(1);
@@ -158,10 +227,52 @@ nav {
 
 
 /* ============================================================
-   6. БУРГЕР — две полоски, видим ВСЕГДА (десктоп и мобилка)
+   5.1. ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКА
+   ============================================================ */
+.lang-toggle {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+
+    background: transparent;
+    border: none;
+
+    color: var(--accent-text);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1;
+
+    cursor: pointer;
+    transform-origin: center;
+    transition: opacity 0.2s ease;
+}
+
+.lang-toggle:hover {
+    opacity: 0.7;
+}
+
+.lang-toggle.flipping {
+    animation: langFlip 0.5s ease;
+}
+
+@keyframes langFlip {
+    0%   { transform: rotate(0deg)   scale(1);    }
+    50%  { transform: rotate(180deg) scale(1.15); }
+    100% { transform: rotate(360deg) scale(1);    }
+}
+
+
+/* ============================================================
+   6. БУРГЕР — две полоски
+   Скрыт на десктопе, показан на мобильном.
    ============================================================ */
 .menu-toggle {
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: space-between;
     width: 22px;
@@ -190,42 +301,18 @@ nav {
 
 
 /* ============================================================
-   7. ВЫЕЗЖАЮЩАЯ ПАНЕЛЬ
-   По умолчанию за правым краем экрана. По клику на бургер
-   выезжает внутрь. Одинаково работает на всех размерах.
-   Ширина: 320px на десктопе, 280px на мобильных (см. ниже).
+   7. НАВИГАЦИЯ (десктоп: горизонтальная строка слева)
    ============================================================ */
 .nav-panel {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 320px;
-    max-width: 85vw;
-    height: 100vh;
-    background: var(--accent);
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch;
-    padding: 80px 20px 20px;
-    transform: translateX(100%);
-    transition: transform 0.25s ease;
-    z-index: 200;
-    overflow-y: auto;
+    align-items: center;
+    margin-right: auto;
 }
 
-.nav-panel.open {
-    transform: translateX(0);
-}
-
-
-/* ---------- Ссылки в панели (вертикально) ---------- */
 .nav-links {
     list-style: none;
     display: flex;
-    flex-direction: column;
-    gap: 4px;
-    width: 100%;
+    gap: 6px;
 }
 
 .nav-links a {
@@ -235,7 +322,7 @@ nav {
     text-decoration: none;
     font-size: 1rem;
     font-weight: 500;
-    padding: 12px 16px;
+    padding: 8px 14px;
     border-radius: 6px;
     opacity: 0.85;
     cursor: pointer;
@@ -256,37 +343,21 @@ nav {
     outline: none;
 }
 
-
-/* ---------- Иконки пунктов меню ----------
-   SVG работает как маска, цвет берётся из background-color.
-   Размер 20×20 — чуть больше текста (~16px). */
 .nav-icon {
-    display: inline-block;
+    display: block;
     width: 20px;
     height: 20px;
-    margin-right: 10px;
+    margin-right: 8px;
     flex-shrink: 0;
-    background-color: var(--accent-text);
 
-    -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-            mask-position: center;
-    -webkit-mask-size: contain;
-            mask-size: contain;
+    color: var(--accent-text);
+    transition: color 0.25s ease;
 }
 
-.icon-home {
-    -webkit-mask-image: url("../icons/home.svg");
-            mask-image: url("../icons/home.svg");
-}
-.icon-folder {
-    -webkit-mask-image: url("../icons/folder.svg");
-            mask-image: url("../icons/folder.svg");
-}
-.icon-mail {
-    -webkit-mask-image: url("../icons/mail.svg");
-            mask-image: url("../icons/mail.svg");
+.nav-icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 
@@ -294,6 +365,9 @@ nav {
    8. ОСНОВНОЙ КОНТЕНТ
    ============================================================ */
 main {
+    position: relative;
+    z-index: 1;
+    flex: 1;
     max-width: 960px;
     width: 100%;
     margin: 0 auto;
@@ -364,18 +438,53 @@ main {
    10. ПОДВАЛ
    ============================================================ */
 footer {
-    text-align: center;
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
     padding: 20px;
+
+    text-align: center;
     font-size: 0.85rem;
     color: var(--text-muted);
-    border-top: 1px solid var(--border);
+}
+
+.footer-inner {
     max-width: 960px;
     margin: 0 auto;
 }
 
+.footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.footer-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.footer-copy {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    opacity: 0.85;
+}
+
 
 /* ============================================================
-   11. ОВЕРЛЕЙ (затемнение под панелью)
+   11. ОВЕРЛЕЙ
    ============================================================ */
 .overlay {
     position: fixed;
@@ -394,12 +503,52 @@ footer {
 
 /* ============================================================
    12. МОБИЛЬНЫЕ (<= 640px)
-   Единственное отличие: панель чуть уже и сетка в одну колонку.
+   Бургер виден, панель выезжает справа.
    ============================================================ */
 @media (max-width: 640px) {
 
+    .menu-toggle {
+        display: flex;
+    }
+
     .nav-panel {
+        position: fixed;
+        top: 0;
+        right: 0;
         width: 280px;
+        max-width: 85vw;
+        height: 100vh;
+        background: var(--accent);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        margin-right: 0;
+        padding: 80px 20px 20px;
+
+        transform: translateX(100%);
+        visibility: hidden;
+
+        transition: transform 0.25s ease, visibility 0s linear 0.25s;
+
+        z-index: 200;
+        overflow-y: auto;
+    }
+
+    .nav-panel.open {
+        transform: translateX(0);
+        visibility: visible;
+        transition: transform 0.25s ease, visibility 0s linear 0s;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 4px;
+        width: 100%;
+    }
+
+    .nav-links a {
+        padding: 12px 16px;
     }
 
     .grid {
@@ -409,7 +558,42 @@ footer {
 
 
 /* ============================================================
-   13. СТРАНИЦА 404
+   13. ДЕСКТОП (>= 641px)
+   Панель — обычная строка. Все ограничения мобильной версии
+   снимаем, чтобы ссылки были кликабельны.
+   ============================================================ */
+@media (min-width: 641px) {
+
+    .menu-toggle {
+        display: none !important;
+    }
+
+    .overlay {
+        display: none !important;
+    }
+
+    .nav-panel {
+        position: static !important;
+        transform: none !important;
+        visibility: visible !important;
+        height: auto !important;
+        width: auto !important;
+        background: transparent !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        z-index: auto !important;
+
+        pointer-events: auto;
+    }
+
+    .nav-panel .nav-links a {
+        pointer-events: auto;
+    }
+}
+
+
+/* ============================================================
+   14. СТРАНИЦА 404
    ============================================================ */
 .error-card {
     text-align: center;
@@ -463,5 +647,206 @@ footer {
     }
     .error-text {
         font-size: 1rem;
+    }
+}
+
+
+/* ============================================================
+   15. УВАЖАЕМ НАСТРОЙКИ ПОЛЬЗОВАТЕЛЯ
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    body::before,
+    [data-theme="light"] .icon-sun svg,
+    [data-theme="dark"] .icon-moon svg {
+        animation: none;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}
+
+
+/* ============================================================
+   16. ПРОФИЛЬ НА ГЛАВНОЙ
+   ============================================================ */
+
+.profile-card {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 40px 28px;
+    text-align: center;
+
+    border-radius: 16px;
+}
+
+.avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 20px;
+    border: 3px solid var(--border);
+    background: var(--bg);
+}
+
+.profile-name-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.nickname {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--heading);
+}
+
+/* ---------- Плашка со значками — полупрозрачная ----------
+   Использует переменную --badges-bg. !important нужен, чтобы
+   никакое другое правило не перебило фон. */
+.badges-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+
+    background: var(--badges-bg) !important;
+    border: 1px solid var(--badges-border) !important;
+    border-radius: 999px;
+
+    transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+/* ---------- Бейджи ---------- */
+.badge {
+    position: relative;
+    width: 28px;
+    height: 28px;
+
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    padding: 0;
+
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: transform 0.15s ease, border-color 0.2s ease;
+}
+
+.badge:hover {
+    transform: scale(1.08);
+    border-color: var(--text-muted);
+}
+
+.badge img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 50%;
+    image-rendering: pixelated;
+}
+
+/* ---------- Заглушки ---------- */
+.badge-placeholder {
+    cursor: default;
+}
+
+.badge-placeholder:hover {
+    transform: none;
+    border-color: var(--border);
+}
+
+.badge-placeholder-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+
+    color: var(--text-muted);
+    font-size: 0.6rem;
+    font-weight: 500;
+    line-height: 1;
+    opacity: 0.5;
+}
+
+/* ---------- Тултип ---------- */
+.badge-tooltip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+
+    background: var(--accent);
+    color: var(--accent-text);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+
+    border: 1px solid var(--border);
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 10;
+}
+
+.badge-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--accent);
+}
+
+.badge:hover .badge-tooltip,
+.badge.active .badge-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.signature {
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--text-muted);
+    letter-spacing: 0.01em;
+}
+
+@media (max-width: 640px) {
+    .profile-card {
+        padding: 32px 20px;
+    }
+    .avatar {
+        width: 100px;
+        height: 100px;
+    }
+    .nickname {
+        font-size: 1.3rem;
+    }
+    .badge {
+        width: 26px;
+        height: 26px;
+    }
+    .badge-tooltip {
+        max-width: 70vw;
+        white-space: normal;
+        text-align: center;
     }
 }
