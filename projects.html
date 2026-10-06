@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru"
+      data-title-ru="Проекты"
+      data-title-en="Projects">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Проекты</title>
 
-    <!-- Анти-вспышка темы -->
     <script>
         (function () {
             var saved = localStorage.getItem('theme');
@@ -20,59 +21,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/styles.css">
+
+    <script src="js/header.js"></script>
+    <script src="js/footer.js"></script>
 </head>
 <body>
 
-    <header>
-        <nav>
-            <div id="nav-panel" class="nav-panel">
-                <ul class="nav-links">
-                    <li>
-                        <a href="index.html">
-                            <span class="nav-icon icon-home"></span>Главная
-                        </a>
-                    </li>
-                    <li>
-                        <a class="active" aria-current="page">
-                            <span class="nav-icon icon-folder"></span>Проекты
-                        </a>
-                    </li>
-                    <li>
-                        <a href="contacts.html">
-                            <span class="nav-icon icon-mail"></span>Контакты
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="nav-actions">
-                <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему">
-                    <span class="icon icon-sun"></span>
-                    <span class="icon icon-moon"></span>
-                </button>
-
-                <button id="menu-toggle" class="menu-toggle" aria-label="Открыть меню">
-                    <span class="burger-line"></span>
-                    <span class="burger-line"></span>
-                </button>
-            </div>
-        </nav>
-
-        <div id="overlay" class="overlay"></div>
-    </header>
+    <site-header active="projects"></site-header>
 
     <main>
         <div class="grid">
             <section class="card full-width">
-                <h2>Проекты</h2>
+                <h2 data-ru="Проекты" data-en="Projects">Проекты</h2>
                 <p class="wip">WIP</p>
             </section>
         </div>
     </main>
 
-    <footer>
-        <p>&copy; <span id="year"></span> Все права защищены</p>
-    </footer>
+    <site-footer></site-footer>
 
     <script src="js/script.js"></script>
 </body>
