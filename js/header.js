@@ -1,10 +1,5 @@
 /* ============================================================
    КОМПОНЕНТ ШАПКИ <site-header>
-   Атрибуты:
-     • active="home" | "projects" | "contacts"
-     • simple — упрощённая шапка без меню (для 404).
-
-   Иконки — инлайновые SVG с fill/stroke="currentColor".
    ============================================================ */
 
 const ICONS = {
@@ -95,6 +90,7 @@ class SiteHeader extends HTMLElement {
             </div>
         `;
 
+        /* Порядок кнопок: бургер · язык · тема */
         const burgerHtml = isSimple ? '' : `
             <button id="menu-toggle" class="menu-toggle" aria-label="Открыть меню">
                 <span class="burger-line"></span>
@@ -107,12 +103,12 @@ class SiteHeader extends HTMLElement {
                 <nav>
                     ${panelHtml}
                     <div class="nav-actions">
+                        ${burgerHtml}
+                        <button id="lang-toggle" class="lang-toggle" aria-label="Switch language">EN</button>
                         <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему">
                             <span class="icon icon-sun">${ICONS.sun}</span>
                             <span class="icon icon-moon">${ICONS.moon}</span>
                         </button>
-                        <button id="lang-toggle" class="lang-toggle" aria-label="Switch language">EN</button>
-                        ${burgerHtml}
                     </div>
                 </nav>
                 <div id="overlay" class="overlay"></div>
