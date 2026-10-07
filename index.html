@@ -1,5 +1,93 @@
 <!DOCTYPE html>
-<html><head>
-    <meta http-equiv="refresh" content="0; url=pages/home.html">
-    <link rel="canonical" href="pages/home.html">
-</head><body></body></html>
+<html lang="ru"
+      data-title-ru="Главная"
+      data-title-en="Home">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная</title>
+
+    <script>
+        (function () {
+            var saved = localStorage.getItem('theme');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var theme = saved || (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+
+    <script src="js/header.js"></script>
+    <script src="js/footer.js"></script>
+</head>
+<body>
+
+    <site-header active="home"></site-header>
+
+    <main>
+        <section class="card profile-card">
+
+            <img src="images/avatar.jpg"
+                 alt="Mistake_MC"
+                 class="avatar">
+
+            <div class="profile-name-row">
+                <span class="nickname">Mistake_MC</span>
+
+                <div class="badges-box">
+
+                    <button class="badge" type="button" aria-label="Minecraft Wiki">
+                        <img src="images/mc-block.png" alt="">
+                        <span class="badge-tooltip"
+                              data-ru="Администратор Minecraft Wiki"
+                              data-en="Minecraft Wiki Administrator">Администратор Minecraft Wiki</span>
+                    </button>
+
+                    <button class="badge badge-placeholder" type="button" aria-label="Скоро">
+                        <span class="badge-placeholder-inner">?</span>
+                    </button>
+
+                    <button class="badge badge-placeholder" type="button" aria-label="Скоро">
+                        <span class="badge-placeholder-inner">?</span>
+                    </button>
+
+                </div>
+            </div>
+
+            <p class="signature">I'm drawing my universe!</p>
+
+        </section>
+    </main>
+
+    <footer class="footer-home">
+        <div class="footer-inner">
+
+            <div class="footer-links">
+                <a href="https://github.com/XmaxmakerX/Bio"
+                   target="_blank"
+                   rel="noopener"
+                   class="footer-link">GitHub</a>
+
+                <a href="home/contacts.html"
+                   class="footer-link"
+                   data-ru="Контакты"
+                   data-en="Contacts">Контакты</a>
+            </div>
+
+            <p class="footer-copy">
+                &copy; <span id="year"></span>
+                <span data-ru="Все права защищены"
+                      data-en="All rights reserved">Все права защищены</span>
+            </p>
+
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
