@@ -83,7 +83,7 @@ class SiteHeader extends HTMLElement {
         const panelHtml = isSimple ? '' : `
             <div id="nav-panel" class="nav-panel">
                 <ul class="nav-links">
-                    ${menuItem('home.html',    'home',     'home',   'Главная',  'Home')}
+                    ${menuItem('index.html',    'home',     'home',   'Главная',  'Home')}
                     ${menuItem('projects.html', 'projects', 'folder', 'Проекты',  'Projects')}
                     ${menuItem('contacts.html', 'contacts', 'mail',   'Контакты', 'Contacts')}
                 </ul>
