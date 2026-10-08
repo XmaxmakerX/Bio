@@ -44,7 +44,7 @@
 
 
 /* ============================================================
-   1.5. АНИМИРОВАННЫЙ ФОН
+   1.5. АНИМИРОВАННЫЙ ФОН — ДИАГОНАЛЬНАЯ СЕТКА
    ============================================================ */
 body::before {
     content: '';
@@ -496,8 +496,7 @@ footer {
 
 /* ============================================================
    12. МОБИЛЬНЫЕ (<= 640px)
-   Панель выезжает СЛЕВА.
-   Кнопки остаются справа в шапке.
+   Панель выезжает слева, кнопки справа.
    ============================================================ */
 @media (max-width: 640px) {
 
@@ -508,8 +507,8 @@ footer {
     .nav-panel {
         position: fixed;
         top: 0;
-        left: 0;                     /* было right: 0 */
-        right: auto;                 /* сбрасываем right */
+        left: 0;
+        right: auto;
 
         width: 280px;
         max-width: 85vw;
@@ -522,7 +521,6 @@ footer {
         margin-right: 0;
         padding: 80px 20px 20px;
 
-        /* Прячем панель за ЛЕВЫЙ край */
         transform: translateX(-100%);
         visibility: hidden;
 
@@ -675,6 +673,18 @@ footer {
     padding: 40px 28px;
     text-align: center;
     border-radius: 16px;
+
+    /* Нужен для превью аватарки — иначе обрежется */
+    overflow: visible;
+}
+
+/* ---------- Аватарка + превью ---------- */
+.avatar-wrap {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    display: block;
 }
 
 .avatar {
@@ -683,11 +693,50 @@ footer {
     border-radius: 50%;
     object-fit: cover;
     display: block;
-    margin: 0 auto 20px;
     border: 3px solid var(--border);
     background: var(--bg);
+    cursor: pointer;
+
+    transition: transform 0.25s ease, border-color 0.2s ease;
 }
 
+.avatar:hover {
+    transform: scale(1.03);
+    border-color: var(--text-muted);
+}
+
+/* Увеличенная миниатюра — появляется при наведении */
+.avatar-preview {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 16px);
+    transform: translateY(-50%) scale(0.9);
+
+    width: 260px;
+    height: 260px;
+    border-radius: 12px;
+    object-fit: cover;
+
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+
+    z-index: 20;
+}
+
+.avatar-wrap:hover .avatar-preview {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) scale(1);
+}
+
+/* ---------- Ник ---------- */
 .profile-name-row {
     display: flex;
     align-items: center;
@@ -704,6 +753,7 @@ footer {
     color: var(--heading);
 }
 
+/* ---------- Плашка со значками ---------- */
 .badges-box {
     display: flex;
     align-items: center;
@@ -817,21 +867,32 @@ footer {
     letter-spacing: 0.01em;
 }
 
+/* ---------- Мобильные правки ---------- */
 @media (max-width: 640px) {
     .profile-card {
         padding: 32px 20px;
     }
+
+    .avatar-wrap,
     .avatar {
         width: 100px;
         height: 100px;
     }
+
+    /* На мобильном превью скрыто — hover не работает */
+    .avatar-preview {
+        display: none;
+    }
+
     .nickname {
         font-size: 1.3rem;
     }
+
     .badge {
         width: 26px;
         height: 26px;
     }
+
     .badge-tooltip {
         max-width: 70vw;
         white-space: normal;
