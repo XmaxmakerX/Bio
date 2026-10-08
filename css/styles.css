@@ -674,7 +674,6 @@ footer {
     text-align: center;
     border-radius: 16px;
 
-    /* Нужен для превью аватарки — иначе обрежется */
     overflow: visible;
 }
 
@@ -705,7 +704,8 @@ footer {
     border-color: var(--text-muted);
 }
 
-/* Увеличенная миниатюра — появляется при наведении */
+/* Увеличенная миниатюра — появляется при наведении
+   (десктоп) или по тапу (мобильный, класс .open) */
 .avatar-preview {
     position: absolute;
     top: 50%;
@@ -730,7 +730,9 @@ footer {
     z-index: 20;
 }
 
-.avatar-wrap:hover .avatar-preview {
+/* Показ: hover на десктопе ИЛИ класс .open (для тача) */
+.avatar-wrap:hover .avatar-preview,
+.avatar-wrap.open .avatar-preview {
     opacity: 1;
     visibility: visible;
     transform: translateY(-50%) scale(1);
@@ -879,9 +881,19 @@ footer {
         height: 100px;
     }
 
-    /* На мобильном превью скрыто — hover не работает */
+    /* Превью — по центру, снизу от аватарки.
+       На таче работает по тапу (.open), на десктопе — hover. */
     .avatar-preview {
-        display: none;
+        top: calc(100% + 12px);
+        left: 50%;
+        transform: translateX(-50%) scale(0.9);
+
+        width: 220px;
+        height: 220px;
+    }
+
+    .avatar-wrap.open .avatar-preview {
+        transform: translateX(-50%) scale(1);
     }
 
     .nickname {
