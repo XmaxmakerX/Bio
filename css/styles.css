@@ -728,6 +728,7 @@ footer {
     transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
 
     z-index: 20;
+    isolation: isolate;
 }
 
 .avatar-wrap:hover .avatar-preview {
