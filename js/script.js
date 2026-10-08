@@ -1,7 +1,7 @@
 /* ============================================================
    СКРИПТ СТРАНИЦЫ
    Обработчики навешиваются после того, как <site-header>
-   отрисует свою разметку (иначе кнопок в DOM ещё нет).
+   отрисует свою разметку.
    ============================================================ */
 
 
@@ -15,7 +15,6 @@ function waitForElement(id, callback) {
         return;
     }
 
-    /* Если элемента ещё нет — следим за DOM */
     var observer = new MutationObserver(function (mutations, obs) {
         var found = document.getElementById(id);
         if (found) {
@@ -53,25 +52,20 @@ waitForElement('lang-toggle', function (langBtn) {
         document.documentElement.setAttribute('lang', lang);
         document.documentElement.setAttribute('data-lang', lang);
 
-        /* Меняем текст у всех элементов с data-ru / data-en */
         document.querySelectorAll('[data-ru]').forEach(function (el) {
             var text = el.getAttribute('data-' + lang);
             if (text !== null) el.textContent = text;
         });
 
-        /* Заголовок вкладки */
         var pageTitle = document.documentElement.getAttribute('data-title-' + lang);
         if (pageTitle) document.title = pageTitle;
 
-        /* Кнопка показывает язык, на который переключимся */
         langBtn.textContent = lang === 'ru' ? 'EN' : 'RU';
     }
 
-    /* Применяем сохранённый язык при загрузке */
     var current = localStorage.getItem('lang') || 'ru';
     applyLang(current);
 
-    /* Клик — переключаем, запоминаем, анимация разворота */
     langBtn.addEventListener('click', function () {
         var next = (localStorage.getItem('lang') || 'ru') === 'ru' ? 'en' : 'ru';
         localStorage.setItem('lang', next);
@@ -89,9 +83,7 @@ waitForElement('lang-toggle', function (langBtn) {
 
 
 /* ============================================================
-   3) БУРГЕР + ПАНЕЛЬ (только на мобильных)
-   inert ставится ТОЛЬКО когда панель реально скрыта
-   (узкий экран). На десктопе панель всегда видна и кликабельна.
+   3) БУРГЕР + ПАНЕЛЬ
    ============================================================ */
 waitForElement('menu-toggle', function (menuToggle) {
     var navPanel = document.getElementById('nav-panel');
@@ -99,27 +91,22 @@ waitForElement('menu-toggle', function (menuToggle) {
 
     if (!navPanel) return;
 
-    /* Проверяем: мобильный ли сейчас режим */
     function isMobile() {
         return window.matchMedia('(max-width: 640px)').matches;
     }
 
-    /* Обновляем состояние панели в зависимости от ширины экрана */
     function syncPanelState() {
         if (isMobile()) {
-            /* На мобильном панель закрыта — ставим aria-hidden и inert */
             if (!navPanel.classList.contains('open')) {
                 navPanel.setAttribute('aria-hidden', 'true');
                 navPanel.setAttribute('inert', '');
             }
         } else {
-            /* На десктопе панель всегда видна — снимаем ограничения */
             navPanel.removeAttribute('aria-hidden');
             navPanel.removeAttribute('inert');
         }
     }
 
-    /* Синхронизация при загрузке и при изменении ширины */
     syncPanelState();
     window.addEventListener('resize', syncPanelState);
 
@@ -147,7 +134,6 @@ waitForElement('menu-toggle', function (menuToggle) {
         document.body.style.overflow = '';
 
         syncPanelState();
-
         menuToggle.setAttribute('aria-label', 'Открыть меню');
     }
 
@@ -175,7 +161,6 @@ waitForElement('year', function (yearEl) {
    5) БЕЙДЖИ С ТУЛТИПАМИ (клик на мобильном)
    ============================================================ */
 (function () {
-    /* Ждём, пока бейджи появятся на странице */
     function initBadges() {
         var badges = document.querySelectorAll('.badge:not(.badge-placeholder)');
         if (!badges.length) return false;
@@ -201,11 +186,45 @@ waitForElement('year', function (yearEl) {
         return true;
     }
 
-    /* Если бейджи есть сразу — вешаем обработчики.
-       Если нет — ждём, пока они появятся. */
     if (!initBadges()) {
         var observer = new MutationObserver(function (mutations, obs) {
             if (initBadges()) obs.disconnect();
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
+})();
+
+
+/* ============================================================
+   6) ПРЕВЬЮ АВАТАРКИ НА ТАЧ-УСТРОЙСТВАХ
+   Тап по аватарке — открывает превью.
+   Тап в любом другом месте — закрывает.
+   На десктопе работает :hover (CSS), здесь только мобильные.
+   ============================================================ */
+(function () {
+    function initAvatarPreview() {
+        var wrap = document.querySelector('.avatar-wrap');
+        if (!wrap) return false;
+
+        wrap.addEventListener('click', function (e) {
+            /* Только для тач-устройств (где нет hover) */
+            if (!window.matchMedia('(hover: none)').matches) return;
+
+            e.stopPropagation();
+            wrap.classList.toggle('open');
+        });
+
+        /* Тап в любом другом месте — закрыть */
+        document.addEventListener('click', function () {
+            wrap.classList.remove('open');
+        });
+
+        return true;
+    }
+
+    if (!initAvatarPreview()) {
+        var observer = new MutationObserver(function (mutations, obs) {
+            if (initAvatarPreview()) obs.disconnect();
         });
         observer.observe(document.body, { childList: true, subtree: true });
     }
