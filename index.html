@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Главная</title>
 
+    <!-- Анти-вспышка темы -->
     <script>
         (function () {
             var saved = localStorage.getItem('theme');
@@ -32,9 +33,17 @@
     <main>
         <section class="card profile-card">
 
-            <img src="images/avatar.png"
-                 alt="Mistake_MC"
-                 class="avatar">
+            <!-- Аватарка с превью при наведении -->
+            <div class="avatar-wrap">
+                <img src="images/avatar.jpg"
+                     alt="Mistake_MC"
+                     class="avatar">
+
+                <img src="images/avatar.jpg"
+                     alt=""
+                     class="avatar-preview"
+                     aria-hidden="true">
+            </div>
 
             <div class="profile-name-row">
                 <span class="nickname">Mistake_MC</span>
